@@ -35,6 +35,8 @@ import com.example.lectureexamples.models.Movie
 import com.example.lectureexamples.models.getMovies
 import com.example.lectureexamples.ui.theme.LectureExamplesTheme
 import androidx.compose.ui.res.imageResource
+import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
@@ -105,11 +107,12 @@ fun MovieRow(movie: Movie, onClick: (String) -> Unit = {}) {
                 contentAlignment = Alignment.BottomCenter,
             ) {
 
-                Image(
-                    painter = painterResource(id = R.drawable.avatar2),
-                    contentDescription = "Movie Poster",
+                AsyncImage(
+                    model = movie.images[0],
+                    contentDescription = null,
                     contentScale = ContentScale.Crop
                 )
+
                 // Add a gradient on top of the image
                 Box(
                     modifier = Modifier
@@ -156,9 +159,17 @@ fun MovieRow(movie: Movie, onClick: (String) -> Unit = {}) {
             }
 
             if (expanded) {
-                Text(
-                    text = "description"
-                )
+                Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                    Text(text = "Director: " + movie.director)
+                    Text(text = "Year: " + movie.year)
+                    Text(text = "Genre: " + movie.genre)
+                    Text(text = "Actors: " + movie.actors)
+                    Text(text = "Rating: " + movie.rating)
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Divider()
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(text = movie.plot)
+                }
             }
         }
 
