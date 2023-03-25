@@ -34,35 +34,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             LectureExamplesTheme {
-                var expanded by remember {
-                    mutableStateOf(false)
-                }
-                //https://foso.github.io/Jetpack-Compose-Playground/material/topappbar/
-                Column {
-                    TopAppBar(
-                        elevation = 4.dp,
-                        title = {
-                            Text("I'm a TopAppBar")
-                        },
-                        backgroundColor = MaterialTheme.colors.primarySurface, actions = {
-                            Box() {
-                                IconButton(onClick = {expanded = true}) {
-                                    Icon(Icons.Filled.MoreVert, null)
-                                }
-                                //https://semicolonspace.com/dropdown-menu-jetpack-compose/#dropdown
-                                DropdownMenu(
-                                    expanded = expanded,
-                                    onDismissRequest = {
-                                        expanded = false
-                                    }
-                                ){
-                                    Text(text = "test")
-                                }
-                            }
-                        })
                     Navigation()
                 }
             }
         }
     }
-}
