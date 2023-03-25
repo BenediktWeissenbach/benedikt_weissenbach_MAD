@@ -26,32 +26,16 @@ import com.example.lectureexamples.widgets.MovieRow
 import com.example.lectureexamples.widgets.simpleTopAppBar
 
 @Composable
-fun DetailScreen(navController: NavHostController, movieId: String?) {
+fun FavoritesScreen(navController: NavHostController) {
 
     Column() {
-
         simpleTopAppBar(text = "Movies", navController = navController)
 
-        //https://stackoverflow.com/questions/51010592/kotlin-how-to-return-a-single-object-from-a-list-that-contains-a-specific-id
-        getMovies().find{it.id == movieId}?.let {
-            MovieRow(movie = it){
+        LazyColumn{
 
-            }
-        }
-
-        getMovies().find{it.id == movieId}?.let {
-            LazyRow(){
-                items(it.images){
-                    imageLink ->
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(imageLink)
-                            .crossfade(true)
-                            .build(),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+            items(getMovies().subList(0,2)) {movie ->
+                MovieRow(movie = movie){
+                        movieId -> navController.navigate("detail/$movieId")
                 }
             }
         }

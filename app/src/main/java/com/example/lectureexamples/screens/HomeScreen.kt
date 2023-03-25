@@ -39,6 +39,7 @@ import com.example.lectureexamples.ui.theme.LectureExamplesTheme
 import androidx.compose.ui.res.imageResource
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
+import com.example.lectureexamples.widgets.MovieRow
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
@@ -49,7 +50,6 @@ fun HomeScreen(navController: NavHostController) {
             color = MaterialTheme.colors.background
         ) {
             Column {
-                //Greeting()
                 //https://foso.github.io/Jetpack-Compose-Playground/material/topappbar/
                 var expanded by remember {
                     mutableStateOf(false)
@@ -61,7 +61,7 @@ fun HomeScreen(navController: NavHostController) {
                     },
                     backgroundColor = MaterialTheme.colors.primarySurface, actions = {
                         Box() {
-                            IconButton(onClick = {expanded = true}) {
+                            IconButton(onClick = { expanded = true }) {
                                 Icon(Icons.Filled.MoreVert, null)
                             }
                             //https://semicolonspace.com/dropdown-menu-jetpack-compose/#dropdown
@@ -70,8 +70,8 @@ fun HomeScreen(navController: NavHostController) {
                                 onDismissRequest = {
                                     expanded = false
                                 }
-                            ){
-                                Row() {
+                            ) {
+                                Row(modifier = Modifier.clickable { navController.navigate("favorites") }) {
                                     Icon(Icons.Filled.Favorite, null)
                                     Text(text = "Favorites")
                                 }
@@ -80,13 +80,10 @@ fun HomeScreen(navController: NavHostController) {
                     })
                 Text(
                     style = MaterialTheme.typography.h6,
-                    text= "Movie List"
+                    text = "Movie List"
                 )
-                MyList(navController= navController)
+                MyList(navController = navController)
             }
-            //MyList()
-            //Greeting()
-            //WelcomeText(modifier = Modifier.padding(16.dp), text = "welcome to my app!")
         }
     }
 }
@@ -98,177 +95,8 @@ fun MyList(movies: List<Movie> = getMovies(), navController: NavHostController){
 
         items(movies) {movie ->
             MovieRow(movie = movie){
-                    movieId -> navController.navigate("detailscreen/$movieId")
+                    movieId -> navController.navigate("detail/$movieId")
             }
         }
-    }
-}
-
-
-@Composable
-fun MovieRow(movie: Movie, onClick: (String) -> Unit = {}) {
-
-    var expanded by remember {
-        mutableStateOf(false)
-    }
-
-    val rotationState by animateFloatAsState(
-        targetValue = if (expanded) 180f else 0f
-    )
-
-
-    Card(modifier = Modifier
-        .clickable { onClick(movie.id) }
-        .fillMaxWidth()
-        .padding(8.dp)
-        .animateContentSize(
-            animationSpec = tween(
-                durationMillis = 300,
-                easing = LinearOutSlowInEasing
-            )
-        ),
-        shape = RoundedCornerShape(corner = CornerSize(15.dp)),
-    ) {
-        Column() {
-
-            Box(modifier = Modifier
-                .height(180.dp)
-                .fillMaxWidth(),
-                contentAlignment = Alignment.BottomCenter,
-            ) {
-
-                AsyncImage(
-                    model = movie.images[0],
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop
-                )
-
-                // Add a gradient on top of the image
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(Color.Transparent, Color.Black),
-                                startY = 220f,
-                                endY = 450f
-                            )
-                        )
-                )
-
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(10.dp),
-                    contentAlignment = Alignment.TopEnd
-                ){
-                    Icon(
-                        tint = MaterialTheme.colors.secondary,
-                        imageVector = Icons.Default.FavoriteBorder,
-                        contentDescription = "Add to favorites",
-                    )
-                }
-
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp)
-                        .clickable { expanded = !expanded },
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-
-                    Text(movie.title, style = MaterialTheme.typography.h6, color = Color.White)
-                    Icon(
-                        imageVector = Icons.Default.KeyboardArrowUp,
-                        contentDescription = "Show details",
-                        tint = Color.White,
-                        modifier = Modifier.rotate(rotationState)
-                    )
-                }
-
-            }
-
-            if (expanded) {
-                Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-                    Text(text = "Director: " + movie.director)
-                    Text(text = "Year: " + movie.year)
-                    Text(text = "Genre: " + movie.genre)
-                    Text(text = "Actors: " + movie.actors)
-                    Text(text = "Rating: " + movie.rating)
-                    Spacer(modifier = Modifier.height(5.dp))
-                    Divider()
-                    Spacer(modifier = Modifier.height(5.dp))
-                    Text(text = movie.plot)
-                }
-            }
-        }
-
-    }
-}
-
-@Preview
-@Composable
-fun WelcomeText(modifier: Modifier = Modifier, text: String = "default") {
-    Row(
-        modifier = modifier
-            .padding(16.dp)
-            .background(Color.Blue)
-            .fillMaxWidth()
-    ) {
-        Text(modifier = modifier, text = "Hola")
-        Text(text = text)
-    }
-
-}
-
-@Preview
-@Composable
-fun Greeting() {
-    Column(modifier = Modifier.padding(16.dp)) {
-        var name by remember {
-            mutableStateOf("")
-        }
-
-        Text(text = "Hello ${name}!")
-
-        OutlinedTextField(
-            value = name,
-            onValueChange = {
-                name = it},
-            label = { Text("Name")}
-        )
-
-
-        /*
-        // step 2 - add a mutableStateOf to fire the event for recomposition
-
-       var name = mutableStateOf("")   // use a state holder to register changes
-        // var name  by mutableStateOf("")
-        Text(text = "Hello ${name.value}!")   // get value of state holder object
-
-        OutlinedTextField(
-            value = name.value,
-            onValueChange = { name.value = it },    // change its value accordingly
-            label = { Text("Name")}
-        )
-        */
-
-
-
-        /*
-        // step 3 - use remember
-        var name by remember {         // use remember to skip overwriting after first composition
-            mutableStateOf("")
-        }
-
-        Text(text = "Hello ${name}!")
-
-        OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
-            label = { Text("Name")}
-        )
-
-         */
     }
 }
