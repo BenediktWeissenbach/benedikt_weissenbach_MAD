@@ -17,8 +17,10 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,6 +50,34 @@ fun HomeScreen(navController: NavHostController) {
         ) {
             Column {
                 //Greeting()
+                //https://foso.github.io/Jetpack-Compose-Playground/material/topappbar/
+                var expanded by remember {
+                    mutableStateOf(false)
+                }
+                TopAppBar(
+                    elevation = 4.dp,
+                    title = {
+                        Text("Movies")
+                    },
+                    backgroundColor = MaterialTheme.colors.primarySurface, actions = {
+                        Box() {
+                            IconButton(onClick = {expanded = true}) {
+                                Icon(Icons.Filled.MoreVert, null)
+                            }
+                            //https://semicolonspace.com/dropdown-menu-jetpack-compose/#dropdown
+                            DropdownMenu(
+                                expanded = expanded,
+                                onDismissRequest = {
+                                    expanded = false
+                                }
+                            ){
+                                Row() {
+                                    Icon(Icons.Filled.Favorite, null)
+                                    Text(text = "Favorites")
+                                }
+                            }
+                        }
+                    })
                 Text(
                     style = MaterialTheme.typography.h6,
                     text= "Movie List"
