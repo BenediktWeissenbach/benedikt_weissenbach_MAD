@@ -17,10 +17,7 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,10 +36,12 @@ import com.example.lectureexamples.ui.theme.LectureExamplesTheme
 import androidx.compose.ui.res.imageResource
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
+import com.example.lectureexamples.MovieViewModel
 import com.example.lectureexamples.widgets.MovieRow
+import com.example.lectureexamples.widgets.MyList
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController, movieViewModel: MovieViewModel) {
     LectureExamplesTheme {
         // A surface container using the 'background' color from the theme
         Surface(
@@ -75,6 +74,12 @@ fun HomeScreen(navController: NavHostController) {
                                     Icon(Icons.Filled.Favorite, null)
                                     Text(text = "Favorites")
                                 }
+
+                                Row(modifier = Modifier.clickable { navController.navigate("add") }) {
+                                    Icon(Icons.Default.Add, null)
+                                    Text(text = "Add Movie")
+                                }
+
                             }
                         }
                     })
@@ -82,20 +87,7 @@ fun HomeScreen(navController: NavHostController) {
                     style = MaterialTheme.typography.h6,
                     text = "Movie List"
                 )
-                MyList(navController = navController)
-            }
-        }
-    }
-}
-
-@Composable
-fun MyList(movies: List<Movie> = getMovies(), navController: NavHostController){
-
-    LazyColumn{
-
-        items(movies) {movie ->
-            MovieRow(movie = movie){
-                    movieId -> navController.navigate("detail/$movieId")
+                MyList(navController= navController, movieViewModel = movieViewModel);
             }
         }
     }

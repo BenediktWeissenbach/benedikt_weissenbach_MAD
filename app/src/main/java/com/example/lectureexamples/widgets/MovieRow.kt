@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
@@ -22,10 +23,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.lectureexamples.MovieUI
 import com.example.lectureexamples.models.Movie
 
 @Composable
-fun MovieRow(movie: Movie, onClick: (String) -> Unit = {}) {
+fun MovieRow(movie: MovieUI, onClick: (String) -> Unit = {}) {
 
     var expanded by remember {
         mutableStateOf(false)
@@ -80,11 +82,17 @@ fun MovieRow(movie: Movie, onClick: (String) -> Unit = {}) {
                     .padding(10.dp),
                     contentAlignment = Alignment.TopEnd
                 ){
-                    Icon(
-                        tint = MaterialTheme.colors.secondary,
-                        imageVector = Icons.Default.FavoriteBorder,
-                        contentDescription = "Add to favorites",
-                    )
+                    IconButton(onClick = { movie.fav = !movie.fav }) {
+                        Icon(
+                            tint = MaterialTheme.colors.secondary,
+                            imageVector = if(!movie.fav){
+                                Icons.Default.FavoriteBorder
+                            }else{
+                                Icons.Default.Favorite
+                                 },
+                            contentDescription = "Add to favorites",
+                        )
+                    }
                 }
 
 

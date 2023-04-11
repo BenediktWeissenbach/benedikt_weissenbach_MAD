@@ -21,25 +21,26 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.lectureexamples.MovieViewModel
 import com.example.lectureexamples.models.getMovies
 import com.example.lectureexamples.widgets.MovieRow
 import com.example.lectureexamples.widgets.simpleTopAppBar
 
 @Composable
-fun DetailScreen(navController: NavHostController, movieId: String?) {
+fun DetailScreen(navController: NavHostController, movieId: String?, movieViewModel: MovieViewModel) {
 
     Column() {
 
         simpleTopAppBar(text = "Movies", navController = navController)
 
         //https://stackoverflow.com/questions/51010592/kotlin-how-to-return-a-single-object-from-a-list-that-contains-a-specific-id
-        getMovies().find{it.id == movieId}?.let {
+        movieViewModel.moviesList.find{it.id == movieId}?.let {
             MovieRow(movie = it){
 
             }
         }
 
-        getMovies().find{it.id == movieId}?.let {
+        movieViewModel.moviesList.find{it.id == movieId}?.let {
             LazyRow(){
                 items(it.images){
                     imageLink ->

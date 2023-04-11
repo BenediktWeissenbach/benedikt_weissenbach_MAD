@@ -21,19 +21,20 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.lectureexamples.MovieViewModel
 import com.example.lectureexamples.models.getMovies
 import com.example.lectureexamples.widgets.MovieRow
 import com.example.lectureexamples.widgets.simpleTopAppBar
 
 @Composable
-fun FavoritesScreen(navController: NavHostController) {
+fun FavoritesScreen(navController: NavHostController, movieViewModel: MovieViewModel) {
 
     Column() {
         simpleTopAppBar(text = "Movies", navController = navController)
 
         LazyColumn{
 
-            items(getMovies().subList(0,2)) {movie ->
+            items(movieViewModel.moviesList.filter { it.fav }) {movie ->
                 MovieRow(movie = movie){
                         movieId -> navController.navigate("detail/$movieId")
                 }
